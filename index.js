@@ -24,7 +24,18 @@ Error.extend = function(subTypeName, errorCode /*optional*/) {
 		//populate error details
 		this.name = subTypeName; 
 		this.code = errorCode;
-		this.message = message || '';
+		
+		this.message = '';
+		
+		if(typeof message === "string"){
+			this.message = message;
+		}else if(typeof message === "object"){
+			var self = this;
+			Object.keys(message).map(function(k){
+				var v = message[k];
+				self[k] = v;
+			})
+		}
 		
 		//include stack trace in error object
 		Error.captureStackTrace(this, this.constructor);
